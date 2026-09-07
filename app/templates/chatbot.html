@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* =========================
+           SABIT CHAT BUTONU
+        ========================= */
+
+        .chat-button {
+
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #315c3b;
+            color: white;
+
+            font-size: 26px;
+
+            cursor: pointer;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+            z-index: 9999;
+        }
+
+
+        /* =========================
+           CHAT KUTUSU
+        ========================= */
+
+        .chat-box {
+
+            position: fixed;
+
+            right: 25px;
+            bottom: 100px;
+
+            width: 350px;
+            height: 500px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+            display: none;
+
+            flex-direction: column;
+
+            overflow: hidden;
+
+            z-index: 9998;
+        }
+
+
+        /* =========================
+           CHAT HEADER
+        ========================= */
+
+        .chat-header {
+
+            background: #315c3b;
+            color: white;
+
+            padding: 20px;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .chat-header h3 {
+
+            margin: 0;
+
+            font-size: 17px;
+        }
+
+
+        .close-button {
+
+            border: none;
+
+            background: none;
+
+            color: white;
+
+            font-size: 22px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MESAJ ALANI
+        ========================= */
+
+        .chat-messages {
+
+            flex: 1;
+
+            padding: 20px;
+
+            overflow-y: auto;
+
+            background: #f7f7f3;
+        }
+
+
+        .message {
+
+            margin-bottom: 15px;
+
+            padding: 12px 15px;
+
+            border-radius: 15px;
+
+            max-width: 85%;
+
+            line-height: 1.4;
+
+            font-size: 14px;
+        }
+
+
+        .ai-message {
+
+            background: white;
+
+            color: #333;
+        }
+
+
+        .user-message {
+
+            background: #315c3b;
+
+            color: white;
+
+            margin-left: auto;
+        }
+
+
+        /* =========================
+           INPUT ALANI
+        ========================= */
+
+        .chat-input-area {
+
+            display: flex;
+
+            padding: 12px;
+
+            gap: 8px;
+
+            border-top: 1px solid #ddd;
+
+            background: white;
+        }
+
+
+        .chat-input {
+
+            flex: 1;
+
+            border: 1px solid #ddd;
+
+            border-radius: 20px;
+
+            padding: 10px 15px;
+
+            outline: none;
+        }
+
+
+        .send-button {
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #315c3b;
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MOBIL
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .chat-box {
+
+                right: 15px;
+
+                bottom: 90px;
+
+                width: calc(100% - 30px);
+
+                height: 500px;
+            }
+
+
+            .chat-button {
+
+                right: 15px;
+
+                bottom: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         CHAT KUTUSU
+    ========================= -->
+
+    <div class="chat-box" id="chatBox">
+
+
+        <div class="chat-header">
+
+            <h3>🌱 Earthseed AI</h3>
+
+            <button
+                class="close-button"
+                onclick="toggleChat()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="chat-messages"
+            id="chatMessages">
+
+            <div class="message ai-message">
+
+                Merhaba! 🌱
+
+                Ben Earthseed AI.
+
+                Sana nasil yardimci olabilirim?
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-input-area">
+
+            <input
+                type="text"
+                id="chatInput"
+                class="chat-input"
+                placeholder="Bir sey sor..."
+            >
+
+
+            <button
+                class="send-button"
+                onclick="sendMessage()">
+
+                ➤
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SABIT CHAT BUTONU
+    ========================= -->
+
+    <button
+        class="chat-button"
+        onclick="toggleChat()">
+
+        🌱
+
+    </button>
+
+
+    <script>
+
+
+        /* =========================
+           CHAT AC / KAPAT
+        ========================= */
+
+        function toggleChat() {
+
+            const chatBox =
+                document.getElementById("chatBox");
+
+
+            if (chatBox.style.display === "flex") {
+
+                chatBox.style.display = "none";
+
+            }
+
+            else {
+
+                chatBox.style.display = "flex";
+
+            }
+
+        }
+
+
+        /* =========================
+           MESAJ GONDER
+        ========================= */
+
+        async function sendMessage() {
+
+
+            const input =
+                document.getElementById("chatInput");
+
+
+            const messages =
+                document.getElementById("chatMessages");
+
+
+            const message =
+                input.value.trim();
+
+
+            if (!message) {
+
+                return;
+
+            }
+
+
+            /* Kullanici mesajini ekle */
+
+            messages.innerHTML += `
+
+                <div class="message user-message">
+
+                    ${message}
+
+                </div>
+
+            `;
+
+
+            input.value = "";
+
+
+            /* AI bekleme mesaji */
+
+            messages.innerHTML += `
+
+                <div
+                    class="message ai-message"
+                    id="loadingMessage">
+
+                    Dusunuyorum... 🌱
+
+                </div>
+
+            `;
+
+
+            try {
+
+
+                /* Flask API'ye istek */
+
+                const response = await fetch(
+
+                    "/api/sohbet",
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            mesaj: message,
+
+                            gecmis: []
+
+                        })
+
+                    }
+
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                /* Bekleme mesajini sil */
+
+                const loading =
+                    document.getElementById(
+                        "loadingMessage"
+                    );
+
+
+                if (loading) {
+
+                    loading.remove();
+
+                }
+
+
+                /* AI cevabi */
+
+                if (data.basari) {
+
+
+                    messages.innerHTML += `
+
+                        <div
+                            class="message ai-message">
+
+                            ${data.cevap}
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* Hata */
+
+                else {
+
+
+                    messages.innerHTML += `
+
+                        <div
+                            class="message ai-message">
+
+                            ${data.hata}
+
+                        </div>
+
+                    `;
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                const loading =
+                    document.getElementById(
+                        "loadingMessage"
+                    );
+
+
+                if (loading) {
+
+                    loading.remove();
+
+                }
+
+
+                messages.innerHTML += `
+
+                    <div
+                        class="message ai-message">
+
+                        Sunucuya baglanilamadi.
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* En son mesaja kaydir */
+
+            messages.scrollTop =
+                messages.scrollHeight;
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthseed</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f1e8;
+            color: #243b2a;
+        }
+
+        nav {
+            padding: 25px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            color: #243b2a;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .hero {
+            min-height: 75vh;
+            padding: 80px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero small {
+            color: #6b8e5a;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 70px;
+            line-height: 1;
+            margin: 20px 0;
+        }
+
+        h1 span {
+            color: #6b8e5a;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #5c685e;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 28px;
+            background: #315c3b;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .plant {
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: #d8dfc9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+
+        .section {
+            padding: 80px 7%;
+            background: #315c3b;
+            color: white;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .cards {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+        }
+
+        .card h3 {
+            margin: 15px 0;
+        }
+
+        .card p {
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        footer {
+            padding: 30px;
+            background: #243b2a;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+
+            h1 {
+                font-size: 50px;
+            }
+
+            .plant {
+                width: 280px;
+                height: 280px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">EARTHSEED</div>
+
+        <div>
+            <a href="#anasayfa">Ana Sayfa</a>
+            <a href="#kesfet">Kesfet</a>
+            <a href="#ai">AI Asistan</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="anasayfa">
+
+        <div class="hero-text">
+
+            <small>PLANT-BASED • NATURAL • EARTH</small>
+
+            <h1>
+                Bitkisel yasam,
+                <span>dogadan baslar.</span>
+            </h1>
+
+            <p>
+                Earthseed, bitkisel yasami daha kolay,
+                daha bilincli ve daha keyifli hale
+                getirmek icin tarifleri, urunleri ve
+                yapay zeka destekli rehberligi bir araya getirir.
+            </p>
+
+            <a href="#kesfet" class="button">
+                Kesfet
+            </a>
+
+        </div>
+
+        <div class="plant">
+            🌱
+        </div>
+
+    </section>
+
+    <section class="section" id="kesfet">
+
+        <h2>Earthseed ile kesfet</h2>
+
+        <p>Bitkisel yasam icin ihtiyacin olan her sey.</p>
+
+        <div class="cards">
+
+            <div class="card">
+                <div>🥗</div>
+                <h3>Vegan Tarifler</h3>
+                <p>
+                    Kolay ve lezzetli bitkisel tarifleri kesfet.
+                </p>
+            </div>
+
+            <div class="card">
+                <div>🌱</div>
+                <h3>Dogal Urunler</h3>
+                <p>
+                    Bitkisel yasama uygun urunleri incele.
+                </p>
+            </div>
+
+            <div class="card" id="ai">
+                <div>🤖</div>
+                <h3>Earthseed AI</h3>
+                <p>
+                    Ne pisirecegini bilmiyorsan yapay zekaya sor.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        <p>EARTHSEED — Plant-based living starts with a seed.</p>
+    </footer>
+
+</body>
+</html>
