@@ -11,7 +11,7 @@ class AIService:
 
     def __init__(self):
         self.api_key = Config.GROQ_API_KEY
-        self.model = "llama-3.1-8b-instant"
+        self.model = "openai/gpt-oss-20b"
         self.api_url = "https://api.groq.com/openai/v1/chat/completions"
 
     def _get_business_context(self):
@@ -21,9 +21,9 @@ class AIService:
 
         if not self.api_key:
             return (
-                "Demo modu aktif. "
-                "Groq API anahtari bulunamadigi icin "
-                "su anda gercek yapay zeka yaniti verilemiyor."
+                "Demo mode is active. "
+                "A Groq API key could not be found, "
+                "so a real AI response cannot be generated right now."
             )
 
         if gecmis is None:
@@ -67,9 +67,9 @@ class AIService:
 
             if not response.ok:
                 raise AIServiceError(
-                    f"Groq API hata verdi. "
+                    f"Groq API error. "
                     f"Status: {response.status_code} "
-                    f"Detay: {response.text}"
+                    f"Details: {response.text}"
                 )
 
             result = response.json()
@@ -78,12 +78,12 @@ class AIService:
 
         except requests.RequestException as error:
             raise AIServiceError(
-                f"AI servisine baglanirken hata olustu: {error}"
+                f"An error occurred while connecting to the AI service: {error}"
             ) from error
 
         except (KeyError, IndexError, TypeError) as error:
             raise AIServiceError(
-                f"AI cevabi beklenen formatta degil: {error}"
+                f"The AI response was not in the expected format: {error}"
             ) from error
 
 
