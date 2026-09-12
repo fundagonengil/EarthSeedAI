@@ -44,10 +44,12 @@ def sohbet():
             "cevap": cevap
         }), 200
 
-    except AIServiceError:
+        except AIServiceError as error:
+        print(f"AI SERVICE ERROR: {error}", flush=True)
+
         return jsonify({
             "basari": False,
-            "hata": "Yapay zeka servisine su anda ulasilamiyor."
+            "hata": "The AI service is currently unavailable."
         }), 503
 
 
