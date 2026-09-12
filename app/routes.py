@@ -24,6 +24,7 @@ def dashboard():
 
 
 @api_bp.route("/sohbet", methods=["POST"])
+@api_bp.route("/sohbet", methods=["POST"])
 def sohbet():
     data = request.get_json(silent=True) or {}
 
@@ -33,7 +34,7 @@ def sohbet():
     if not mesaj:
         return jsonify({
             "basari": False,
-            "hata": "Mesaj alani zorunludur."
+            "hata": "Message is required."
         }), 400
 
     try:
@@ -44,7 +45,7 @@ def sohbet():
             "cevap": cevap
         }), 200
 
-        except AIServiceError as error:
+    except AIServiceError as error:
         print(f"AI SERVICE ERROR: {error}", flush=True)
 
         return jsonify({
