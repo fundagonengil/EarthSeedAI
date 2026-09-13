@@ -1,66 +1,20 @@
-from flask import Blueprint, jsonify, request, render_template
+import logging
+from flask import Blueprint, jsonify, request
 
-from app.database import lead_ekle, tum_leadler
-from app.services.ai_service import ai_service, AIServiceError
+from database import lead_ekle  # Kendi proje yapına göre burayı gerekirse 'from app.database import lead_ekle' yapabilirsin.
 
+logger = logging.getLogger(__name__)
 
 api_bp = Blueprint("api", __name__)
-page_bp = Blueprint("pages", __name__)
-
-
-@page_bp.route("/")
-def home():
-    return render_template("index.html")
-
-
-@page_bp.route("/chatbot")
-def chatbot():
-    return render_template("chatbot.html")
-
-
-@page_bp.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")
-
-
-@api_bp.route("/sohbet", methods=["POST"])
-@api_bp.route("/sohbet", methods=["POST"])
-def sohbet():
-    data = request.get_json(silent=True) or {}
-
-    mesaj = data.get("mesaj", "").strip()
-    gecmis = data.get("gecmis", [])
-
-    if not mesaj:
-        return jsonify({
-            "basari": False,
-            "hata": "Message is required."
-        }), 400
-
-    try:
-        cevap = ai_service.yanit_uret(mesaj, gecmis)
-
-        return jsonify({
-            "basari": True,
-            "cevap": cevap
-        }), 200
-
-    except AIServiceError as error:
-        print(f"AI SERVICE ERROR: {error}", flush=True)
-
-        return jsonify({
-            "basari": False,
-            "hata": "The AI service is currently unavailable."
-        }), 503
 
 
 @api_bp.route("/leads", methods=["POST"])
 def lead_olustur():
     data = request.get_json(silent=True) or {}
 
-    isim = data.get("isim", "").strip()
-    telefon = data.get("telefon", "").strip()
-    mesaj = data.get("mesaj", "").strip()
+    isim = str(data.get("isim", "")).strip()
+    telefon = str(data.get("telefon", "")).strip()
+    mesaj = str(data.get("mesaj", "")).strip()
 
     if not isim or not telefon:
         return jsonify({
@@ -68,30 +22,15 @@ def lead_olustur():
             "hata": "Isim ve telefon alanlari zorunludur."
         }), 400
 
-    lead_ekle(isim, telefon, mesaj)
-
-    return jsonify({
-        "basari": True,
-        "mesaj": "Kaydiniz basariyla alindi."
-    }), 201
-
-
-@api_bp.route("/leads", methods=["GET"])
-def leadleri_getir():
-    leads = tum_leadler()
-
-    lead_listesi = []
-
-    for lead in leads:
-        lead_listesi.append({
-            "id": lead["id"],
-            "isim": lead["isim"],
-            "telefon": lead["telefon"],
-            "mesaj": lead["mesaj"],
-            "tarih": lead["tarih"]
-        })
-
-    return jsonify({
-        "basari": True,
-        "leadler": lead_listesi
-    }), 200
+    try:
+        lead_ekle(isim, telefon, mesaj)
+        return jsonify({
+            "basari": True,
+            "mesaj": "Kaydiniz basariyla alindi."
+        }), 201
+    except Exception as e:
+        logger.error(f"VERITABANI HATASI: {e}", exc_info=True)
+        return jsonify({
+            "basari": False,
+            "hata": "Sunucu hatasi olustu."
+        }), 500
