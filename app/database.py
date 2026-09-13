@@ -21,6 +21,9 @@ def init_db():
                 isim TEXT NOT NULL,
                 telefon TEXT NOT NULL,
                 mesaj TEXT,
+                eposta TEXT,
+        
+
                 tarih TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -31,16 +34,16 @@ def init_db():
         connection.close()
 
 
-def lead_ekle(isim, telefon, mesaj):
+def lead_ekle(isim, telefon, mesaj, eposta):
     connection = get_db()
 
     try:
         connection.execute(
             """
-            INSERT INTO leads (isim, telefon, mesaj)
-            VALUES (?, ?, ?)
+            INSERT INTO leads (isim, telefon, mesaj, eposta)
+            VALUES (?, ?, ?, ?)
             """,
-            (isim, telefon, mesaj)
+            (isim, telefon, mesaj, eposta )
         )
 
         connection.commit()
@@ -55,7 +58,7 @@ def tum_leadler():
     try:
         leads = connection.execute(
             """
-            SELECT id, isim, telefon, mesaj, tarih
+            SELECT id, isim, telefon, mesaj, tarih, eposta
             FROM leads
             ORDER BY tarih DESC
             """
