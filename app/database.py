@@ -4,10 +4,27 @@ DATABASE = "earthseed.db"
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row  # Dict gibi erişim sağlamak için şart!
+    conn.row_factory = sqlite3.Row
     return conn
 
+def init_db():
+    """Tablo yoksa otomatik oluşturur"""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS leads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            isim TEXT NOT NULL,
+            telefon TEXT NOT NULL,
+            mesaj TEXT,
+            tarih DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+
 def lead_ekle(isim, telefon, mesaj):
+    init_db()  # Her kayıt öncesi tablonun varlığından emin oluyoruz
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute(
@@ -18,11 +35,10 @@ def lead_ekle(isim, telefon, mesaj):
     conn.close()
 
 def tum_leadler():
+    init_db()
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT id, isim, telefon, mesaj, tarih FROM leads ORDER BY id DESC")
     rows = cursor.fetchall()
     conn.close()
-    
-    # sqlite3.Row objesini standart dict'e çeviriyoruz
     return [dict(row) for row in rows]
