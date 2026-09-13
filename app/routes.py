@@ -1,11 +1,12 @@
 import logging
 from flask import Blueprint, jsonify, request
 
-from database import lead_ekle  # Kendi proje yapına göre burayı gerekirse 'from app.database import lead_ekle' yapabilirsin.
+from app.database import lead_ekle, tum_leadler
 
 logger = logging.getLogger(__name__)
 
 api_bp = Blueprint("api", __name__)
+page_bp = Blueprint("page", __name__)
 
 
 @api_bp.route("/leads", methods=["POST"])
@@ -33,4 +34,20 @@ def lead_olustur():
         return jsonify({
             "basari": False,
             "hata": "Sunucu hatasi olustu."
+        }), 500
+
+
+@api_bp.route("/leads", methods=["GET"])
+def leadleri_getir():
+    try:
+        veriler = tum_leadler()
+        return jsonify({
+            "status": "success",
+            "data": veriler
+        }), 200
+    except Exception as e:
+        logger.error(f"DASHBOARD GET HATASI: {e}", exc_info=True)
+        return jsonify({
+            "status": "error",
+            "message": "Veriler alinamadi."
         }), 500
