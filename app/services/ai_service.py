@@ -53,7 +53,7 @@ class AIService:
         data = {
             "model": self.model,
             "messages": messages,
-            "temperature": 0.7,
+            "temperature": 0.8,
             "max_tokens": 500
         }
 
